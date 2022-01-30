@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<modification
+		xmlns="https://github.com/vqmod/vqmod"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="https://github.com/vqmod/vqmod https://raw.githubusercontent.com/vqmod/vqmod/master/vqmod.xsd"
+		>
+		<id><![CDATA[[VQMOD] Journal3: Use of manufacturer_id in product page & disable Add-To-Cart button area]]></id>
+		<version>0.1.0</version>
+		<vqmver>2.6.6</vqmver>
+		<author>kanenas.net (aka Nikolas Branis) - nbran@kanenas.net</author>
+		<file path="catalog/controller/product/" name="product.php" error="log">
+			<operation error="skip">
+				<search position="before"><![CDATA[$data['model'] = $product_info['model'];]]></search>
+				<add><![CDATA[
+			$data['knns_manufacturer_id'] = (int) $product_info['manufacturer_id'];
+				]]></add>
+			</operation>
+		</file>
+		<file path="catalog/view/theme/journal3/template/product/" name="product.tpl" error="log">
+			<operation error="skip">
+				<search position="replace"><![CDATA[<?php if ($j3->settings->get('catalogCartStatus') || $j3->settings->get('catalogWishlistStatus') || $j3->settings->get('catalogCompareStatus') || ($product_extra_buttons && !$j3->document->isPopup())): ?>]]></search>
+				<add><![CDATA[
+          <?php
+          /*
+          Manufacturers:
+          - Collection Finished ( manufacturer_id = 57 )
+          */
+          ?>
+          <?php if ( ( $j3->settings->get('catalogCartStatus') || $j3->settings->get('catalogWishlistStatus') || $j3->settings->get('catalogCompareStatus') || ($product_extra_buttons && !$j3->document->isPopup()) ) && ( (int) $knns_manufacturer_id != 57 ) ): ?>
+				]]></add>
+			</operation>
+		</file>
+	</modification>
